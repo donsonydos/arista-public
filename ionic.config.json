@@ -1,0 +1,7 @@
+{
+  "name": "arista-public",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
