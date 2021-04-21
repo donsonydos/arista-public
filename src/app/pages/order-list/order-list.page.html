@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar color="light">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Lista de órdenes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+        
+    <ion-list-header>{{customer.label}}</ion-list-header>
+    <ion-row>
+      <ion-col col-4 text-center>
+        Fecha
+      </ion-col>
+      <ion-col col-4 text-center>
+        Hora
+      </ion-col>
+      <ion-col col-4 class="text-right">
+        Valor
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-list>
+    <ion-item *ngFor="let order of orderList" (click)="showDetail(order.id)">
+      <ion-grid>
+        <ion-row>
+          <ion-col col-4>
+            {{generalFunctions.getDateFromDataTimeString(order.date)}}
+          </ion-col>
+          <ion-col col-4>
+            {{generalFunctions.getTimeFromDateTimeString(order.date)}}
+          </ion-col>
+          <ion-col col-4 class="text-right">
+            ${{order.amount | number:'1.2-2'}}
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+
+<ion-footer>
+  <ion-buttons>
+    <ion-button (click)="goVisit()">Visitas</ion-button>
+    <ion-button (click)="goCatalog()">Catálogo</ion-button>
+    <ion-button (click)="goOrders()">Pedidos</ion-button>
+    <ion-button (click)="goToLocalizate()">Localizar</ion-button>
+  </ion-buttons>
+</ion-footer>

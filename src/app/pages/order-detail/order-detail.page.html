@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar color="light">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Detalle de pedido</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <div *ngIf="productsOrder.length > 0">
+      <ion-item class="wishList" *ngFor="let product of productsOrder.slice().reverse()">
+        <div class="image-container" *ngIf="product.image.indexOf('.') === -1">
+          <img src="{{api.imageDirectory}}{{product.image}}.jpg" imageViewer/>
+        </div>
+        <div class="image-container" *ngIf="product.image.indexOf('.') !== -1">
+          <img src="{{api.imageDirectory}}{{product.image}}" imageViewer/>
+        </div>
+        <div class="ref">REF: {{product.prod_name}}</div>
+        <div class="txt9">Descripción: {{product.prod_descriptions}}</div>
+        <div class="txt9">Precio: {{product.price}}</div>
+        <div class="txt9">Cantidad: {{product.quantity}}</div>
+      </ion-item>
+    </div>
+    <div *ngIf="productsOrder.length === 0">
+      <p>No se guardaron productos en este pedido</p>
+    </div>
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-list>
+    <ion-item class="small">
+      Sub Total
+      <ion-note slot="end" color="primary">
+        ${{detailOrder.subtotal | number:'1.2-2'}}
+      </ion-note>
+    </ion-item>
+    <ion-item class="small">
+      IVA del {{ (currentTax * 100) | number:'1.2-2'}}%
+      <ion-note slot="end" color="primary">
+        ${{detailOrder.tax | number:'1.2-2'}}
+      </ion-note>
+    </ion-item>
+    <ion-item class="small">
+      Total
+      <ion-note slot="end" color="primary">
+        ${{detailOrder.total | number:'1.2-2'}}
+      </ion-note>
+    </ion-item>
+  </ion-list>
+</ion-footer>

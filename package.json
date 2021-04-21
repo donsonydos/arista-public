@@ -1,7 +1,7 @@
 {
-  "name": "arista-public",
+  "name": "Arista",
   "version": "0.0.1",
-  "author": "Ionic Framework",
+  "author": "Juan G Cruz",
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "ng": "ng",
@@ -19,8 +19,12 @@
     "@angular/platform-browser": "~11.2.0",
     "@angular/platform-browser-dynamic": "~11.2.0",
     "@angular/router": "~11.2.0",
+    "@capacitor/android": "^2.4.7",
     "@capacitor/core": "2.4.7",
+    "@ionic-native/geolocation": "^5.32.0",
     "@ionic/angular": "^5.5.2",
+    "cordova-plugin-geolocation": "^4.1.0",
+    "ngx-ionic-image-viewer": "^0.7.4",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
@@ -50,5 +54,5 @@
     "tslint": "~6.1.0",
     "typescript": "~4.0.2"
   },
-  "description": "An Ionic project"
+  "description": "Arista catalog"
 }

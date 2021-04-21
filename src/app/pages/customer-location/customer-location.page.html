@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar color="light">
+    <ion-title>Localizar Clientes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row justify-content-center>
+      <div class="autocomplete">
+        <ion-searchbar placeholder="Cliente"
+                       [(ngModel)]="customers.searchText"
+                       (ionInput)="customers.search()"
+                       (ionFocus)="customers.addFocus()"
+                       (ionBlur)="customers.removeFocus()"
+                       debounce=500>
+        </ion-searchbar>
+        <ion-list>
+          <ion-item *ngFor="let customer of customers.filteredCustomer" (click)="customers.changeCustomer(customer)">
+            {{customer.label}}
+          </ion-item>
+        </ion-list>
+      </div>
+    </ion-row>
+    <ion-row justify-content-center>
+      <ion-col>
+        <ion-col>
+          <ion-button expand="full" (click)="saveLocation()">Guarda ubicación</ion-button>
+        </ion-col>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+<ion-footer>
+  <ion-buttons>
+    <ion-button (click)="goVisit()">Visitas</ion-button>
+    <ion-button (click)="goCatalog()">Catálogo</ion-button>
+    <ion-button (click)="goOrders()">Pedidos</ion-button>
+    <ion-button (click)="goToLocalizate()">Localizar</ion-button>
+  </ion-buttons>
+</ion-footer>

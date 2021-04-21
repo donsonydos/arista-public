@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-toolbar color="light">
+    <ion-title>Visita cliente</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <div *ngIf="!visiting">
+    <ion-grid>
+      <ion-row justify-content-center>
+        <div class="autocomplete">
+          <ion-searchbar placeholder="Cliente"
+                         [(ngModel)]="customers.searchText"
+                         (ionInput)="customers.search()"
+                         (ionFocus)="customers.addFocus()"
+                         (ionBlur)="customers.removeFocus()"
+                         debounce=500>
+          </ion-searchbar>
+          <ion-list>
+            <ion-item *ngFor="let customer of customers.filteredCustomer" (click)="customers.changeCustomer(customer)">
+              {{customer.label}}
+            </ion-item>
+          </ion-list>
+        </div>
+      </ion-row>
+      <ion-row justify-content-center>
+        <ion-col>
+          <ion-button expand="full" (click)="startVisit()" ion-button>Empezar visita</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <div *ngIf="visiting">
+    <h2>{{visit.visitCustomerName}}</h2> 
+    <ion-list>
+      <ion-radio-group [(ngModel)]="visit.visitHasSale">
+        <ion-list-header>
+          <ion-label>
+           ¿Realizó Venta?
+          </ion-label>
+        </ion-list-header>
+        <ion-item>
+          <ion-label>Si</ion-label>
+          <ion-radio slot="end" value="1"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>No</ion-label>
+          <ion-radio slot="end" value="0"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </ion-list>
+      <ion-item *ngIf="visit.visitHasSale == 1">
+        <ion-label position="floating">Valor de la venta</ion-label>
+        <ion-input type="number" [(ngModel)]="visit.visitTotalSale"></ion-input>
+      </ion-item>
+      <ion-item *ngIf="visit.visitHasSale != 1">
+        <ion-label position="floating">Motivo por el que no hubo venta</ion-label>
+        <ion-input type="text" [(ngModel)]="visit.visitNoSaleReason"></ion-input>
+      </ion-item>
+      <ion-button expand="full" (click)="finishVisit()">Terminar visita</ion-button>
+  </div>
+</ion-content>
+<ion-footer>
+  <ion-buttons>
+    <ion-button (click)="goVisit()">Visitas</ion-button>
+    <ion-button (click)="goCatalog()">Catálogo</ion-button>
+    <ion-button (click)="goOrders()">Pedidos</ion-button>
+    <ion-button (click)="goToLocalizate()">Localizar</ion-button>
+  </ion-buttons>
+</ion-footer>

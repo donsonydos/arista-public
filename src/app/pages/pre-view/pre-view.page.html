@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-toolbar color="light">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Vista Previa
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding [attr.noScroll]="">
+  <ion-row class="preview" no-padding>
+    <ion-col class="nopad">
+      <div class="image-container" #imageSwipe>
+        <img id="imageFull"
+            *ngIf="currentProduct.image.indexOf('.') === -1"
+            src="{{api.thumbnailsDirectory}}{{currentProduct.image}}.jpg"
+            class="preImage"
+            (click)="openViewer(api.imageDirectory + currentProduct.image + '.jpg')"/>
+        <img id="imageFull"
+            *ngIf="currentProduct.image.indexOf('.') !== -1"
+            src="{{api.thumbnailsDirectory}}{{currentProduct.image}}"
+            class="preImage"
+            (click)="openViewer(api.imageDirectory + currentProduct.image)"/>
+      </div>
+    </ion-col>
+    <ion-col col-3 col-xl-1 no-padding class="lateral-preview" *ngIf="imagesProduct?.length > 1">
+      <div class="verticalScroll" no-padding="">
+        <ion-row *ngFor="let img of imagesProduct" no-padding>
+          <ion-col no-padding class="hgt2">
+            <img *ngIf="img.img_big.indexOf('.') === -1" src="{{api.thumbnailsDirectory}}{{img.img_big}}.jpg" class="thumb-img" (click)="changeImage(img.img_big)"/>
+            <img *ngIf="img.img_big.indexOf('.') !== -1" src="{{api.thumbnailsDirectory}}{{img.img_big}}" class="thumb-img" (click)="changeImage(img.img_big)"/>
+          </ion-col>
+        </ion-row>
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-row no-padding>
+    <ion-col no-padding>
+      <div class="info">
+        <div>Descripción: {{currentProduct.prod_descriptions}}</div>
+        <ion-icon class="addList" [ngClass]="iLikeItem ? 'added':''" [name]="iLikeItem ? 'heart':'heart-outline'" (click)="iLike(img)"></ion-icon>
+      </div>
+    </ion-col>
+    <ion-col col-3 no-padding>
+      <div class="refBig">REF: {{currentProduct.prod_name}}</div>
+    </ion-col>
+
+  </ion-row>
+  <ion-row>
+    <ion-slides (ionSlideDidChange)="slideChanged()" class="image-slider" centeredSlides="true" [options]="slideOptions">
+      <ion-slide *ngFor="let product of productsCategory" class="preview-slide">
+        <div class="OverlayProduct featuredP" *ngIf="product.status == 1">Destacado</div>
+        <div class="OverlayProduct newP" *ngIf="product.status == 2">Nuevo</div>
+        <div class="OverlayProduct soldP" *ngIf="product.status == 4">Agotado</div>
+        <img *ngIf="product.image.indexOf('.') === -1"  src="{{api.thumbnailsDirectory}}{{product.image}}.jpg" class="thumb-img" (click)="changeProduct(product, true)"/>
+        <img *ngIf="product.image.indexOf('.') !== -1"  src="{{api.thumbnailsDirectory}}{{product.image}}" class="thumb-img" (click)="changeProduct(product, true)"/>
+        <div class="waterMask scaleHalf"></div>
+      </ion-slide>
+    </ion-slides>
+  </ion-row>
+</ion-content>

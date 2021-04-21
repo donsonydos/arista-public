@@ -1,0 +1,186 @@
+<ion-header>
+  <ion-toolbar color="light">
+      <ion-buttons slot="start">
+          <ion-back-button></ion-back-button>
+          <ion-button (click)="toggleSideMenu('start')">
+              <ion-icon class="large-icon" name="menu"></ion-icon>
+          </ion-button>
+      </ion-buttons>
+      <ion-title class="padding-0">
+          Arista | <h2>{{api.nameSelector}}</h2>
+      </ion-title>
+      <ion-buttons slot="end">
+          <ion-button (click)="toggleSideMenu('end')">
+              <ion-icon class="large-icon" name="basket"></ion-icon>
+          </ion-button>
+      </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-grid>
+        <ion-row>
+            <ion-col *ngIf="productList?.length === 0">
+                <ion-label>No hay productos para mostrar en esta categoría</ion-label>
+            </ion-col>
+            <ion-col col-12 col-md-4 col-xl-3 class="product" *ngFor="let product of productList">
+                <div class="OverlayProduct featuredP" *ngIf="product.status == 1">Destacado</div>
+                <div class="OverlayProduct newP" *ngIf="product.status == 2">Nuevo</div>
+                <div class="OverlayProduct soldP" *ngIf="product.status == 4">Agotado</div>
+                <div (click)="showDetail(product)" class="image-container" *ngIf="product.image.indexOf('.') === -1"
+                    [style.background-image]="'url('+ api.thumbnailsDirectory + product.image +'.jpg)'">
+                    <div class="waterMask"></div>
+                </div>
+                <div (click)="showDetail(product)" class="image-container" *ngIf="product.image.indexOf('.') !== -1"
+                    [style.background-image]="'url('+ api.thumbnailsDirectory + product.image +')'">
+                    <div class="waterMask"></div>
+                </div>
+                <div class="info">
+                    <div class="ref">
+                        REF: {{product.prod_name}}
+                        <div class="price">Precio: {{product.price}}</div>
+                    </div>
+                    <div>Descripción: {{product.prod_descriptions}}</div>
+                    <ion-icon class="addList" (click)="iLike(product)"
+                              [ngClass]="desiredProduct.desiredProductsIds.indexOf(product.prod_id) >= 0? 'added':''"
+                              [name]="desiredProduct.desiredProductsIds.indexOf(product.prod_id) >= 0? 'heart':'heart-outline'"></ion-icon>
+                </div>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+  </ion-list>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Cargando mas datos...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+
+</ion-content>
+<ion-footer class="filter">
+  <ion-item>
+    <ion-label>Estado</ion-label>
+    <select [(ngModel)]="statusProduct" class="product-status" cancelText="Cancelar" (change)="filterStatus()">
+        <option value="">Todos</option>
+        <option value="1">Destacado</option>
+        <option value="2">Nuevo</option>
+        <option value="3">Normal</option>
+        <option value="4">Agotado</option>
+    </select>
+  </ion-item>
+</ion-footer>
+
+
+<ion-menu side="start" menuId="start" contentId="right-main-content" style="z-index: 100">
+  <ion-header>
+      <ion-toolbar color="primary">
+          <ion-title>
+              <img class="brand" src="assets/appImages/logoMenu.svg">
+          </ion-title>
+      </ion-toolbar>
+
+      <ion-searchbar [(ngModel)]="search" color="primary" class="padding-0" placeholder="Buscar" [showCancelButton]="shouldShowCancel"
+                     (ionCancel)="onCancel($event)"
+                     (ionInput)="getItems($event)"></ion-searchbar>
+  </ion-header>
+
+  <ion-content>
+      <ion-list>
+          <ion-item color="list-primary" [ngClass]="'Todos' === api.nameSelector? 'active':''">
+              <ion-label (click)="loadProductsFromFilter('all','', 'Todos');">Todos</ion-label>
+          </ion-item>
+          <div *ngFor="let category of categoryList">
+              <ion-item color="list-primary" [ngClass]="category.cat_name === api.nameSelector? 'active':''">
+                  <ion-label (click)="loadProductsFromFilter('category',category.cat_id, category.cat_name);">
+                      {{category.cat_name}}
+                  </ion-label>
+              </ion-item>
+              <ion-item color="primary" *ngFor="let subCategory of category.subs"
+                        [ngClass]="category.cat_name+'-'+subCategory.subc_name === api.nameSelector? 'active':''">
+                  <ion-label class="sub-list"
+                             (click)="loadProductsFromFilter('subCategory',subCategory.subc_id, category.cat_name+'-'+subCategory.subc_name)">
+                      {{subCategory.subc_name}}
+                  </ion-label>
+              </ion-item>
+          </div>
+      </ion-list>
+  </ion-content>
+
+  <ion-footer>
+      <ion-buttons>
+          <ion-button (click)="logoutUser()" color="danger">Salir</ion-button>
+          <ion-button *ngIf="userType == 2"  (click)="selectCurrency()" color="primary">$</ion-button>
+      </ion-buttons>
+  </ion-footer>
+</ion-menu>
+
+<ion-menu side="end" menuId="end" contentId="right-main-content" style="z-index: 100">
+  <ion-header>
+      <ion-toolbar color="primary">
+          <ion-title>
+              Carrito de Compras
+          </ion-title>
+      </ion-toolbar>
+  </ion-header>
+  <ion-content>
+      <ion-list>
+          <ion-item class="wishList" *ngFor="let product of desiredProduct.desiredProducts.slice().reverse()">
+              <div class="image-container" *ngIf="product.image.indexOf('.') === -1">
+                  <img src="{{api.imageDirectory}}{{product.image}}.jpg" imageViewer/>
+              </div>
+              <div class="image-container" *ngIf="product.image.indexOf('.') !== -1">
+                  <img src="{{api.imageDirectory}}{{product.image}}" imageViewer/>
+              </div>
+              <button (click)="deleteDesired(product, false)">
+                  <ion-icon name="close"></ion-icon>
+              </button>
+              <div class="ref">REF: {{product.prod_name}}</div>
+              <div class="txt9">Descripción: {{product.prod_descriptions}}</div>
+              <div class="txt9 dark">Precio: {{product.price}}</div>
+              <div class="txt14 flx btwn">
+                  <div (click)="less(product)">-</div>
+                  <div>
+                      <input type="number" class="product-qty" (keyup)="calculateTotalOrder()" [(ngModel)]="product.quantity"/>
+                  </div>
+                  <div (click)="plus(product)">+</div>
+              </div>
+          </ion-item>
+      </ion-list>
+  </ion-content>
+  <ion-footer>
+      <ion-list>
+          <ion-item class="small">
+              Sub Total
+              <ion-note slot="end" color="primary">
+                  ${{detailOrder.subtotal | number:'1.2-2'}}
+              </ion-note>
+          </ion-item>
+          <ion-item class="small">
+              IVA del {{ (currentTax * 100) | number:'1.2-2'}}%
+              <ion-note slot="end" color="primary">
+                  ${{detailOrder.tax | number:'1.2-2'}}
+              </ion-note>
+          </ion-item>
+          <ion-item class="small">
+              Total
+              <ion-note slot="end" color="primary">
+                  ${{detailOrder.total | number:'1.2-2'}}
+              </ion-note>
+          </ion-item>
+          <ion-item class="flx" no-padding>
+              <ion-button expand="full" color="primary"
+                      (click)="sendOrder()">Enviar Pedido
+              </ion-button>
+              <ion-button expand="full" color="danger"
+                      (click)="deleteDesired(null, true)">Borrar todos
+              </ion-button>
+          </ion-item>
+      </ion-list>
+
+  </ion-footer>
+
+</ion-menu>
+<ion-router-outlet id="right-main-content" style="z-index: 100"></ion-router-outlet>

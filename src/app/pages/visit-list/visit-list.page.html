@@ -1,0 +1,82 @@
+<ion-header>
+
+  <ion-toolbar color="light">
+      <ion-title>Lista de visitas</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-item class="no-border">
+      <ion-label>Fecha</ion-label>
+      <ion-datetime displayFormat="DD/MMM/YYYY" pickerFormat="DD MMM YYYY"
+                    [(ngModel)]="dateList.filterDate"
+                    doneText="Aceptar"
+                    cancelText="Cancelar"
+                    monthShortNames="{{monthShortNames}}" (ionChange)="ionViewDidEnter()"></ion-datetime>
+  </ion-item>
+  <ion-grid class="clear">
+      <ion-row>
+          <ion-col col-4>
+              Hora
+          </ion-col>
+          <ion-col col-4>
+              Cliente
+          </ion-col>
+          <ion-col col-4 class="text-right">
+              Tiempo
+          </ion-col>
+      </ion-row>
+  </ion-grid>
+  <ion-list no-padding>
+      <div *ngIf="visitList.length > 0">
+          <ion-item-sliding *ngFor="let visit of visitList">
+              <ion-item>
+                  <ion-grid>
+                      <ion-row>
+                          <ion-col col-3>
+                              {{generalFunctions.getTimeFromDateTimeString(visit.visitStartTime)}}
+                          </ion-col>
+                          <ion-col col-6 class="white-space">
+                              {{visit.visitCustomerName}}
+                          </ion-col>
+                          <ion-col col-3 class="text-right">
+                              {{generalFunctions.msToTime(visit.visitSpendTime)}}
+                          </ion-col>
+                      </ion-row>
+                  </ion-grid>
+              </ion-item>
+              <ion-item-options side="end">
+                  <ion-button expandable>
+                      Editar
+                  </ion-button>
+              </ion-item-options>
+          </ion-item-sliding>
+      </div>
+      <div *ngIf="visitList.length === 0">
+          <p>No se han realizado visitas en esta fecha</p>
+      </div>
+  </ion-list>
+  <ion-item class="total">
+      <ion-grid>
+          <ion-row>
+              <ion-col col-8>
+                  total
+              </ion-col>
+              <ion-col col-4 class="text-right">
+                  {{totalTime}}
+              </ion-col>
+          </ion-row>
+      </ion-grid>
+  </ion-item>
+  <ion-button expand="full" (click)="newVisit()">Visitar Cliente</ion-button>
+</ion-content>
+<ion-footer>
+  <ion-buttons>
+      <ion-button (click)="goVisit()">Visitas</ion-button>
+      <ion-button (click)="goCatalog()">Catálogo</ion-button>
+      <ion-button (click)="goOrders()">Pedidos</ion-button>
+      <ion-button (click)="goToLocalizate()">Localizar</ion-button>
+  </ion-buttons>
+</ion-footer>

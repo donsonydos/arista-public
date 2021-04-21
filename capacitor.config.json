@@ -1,6 +1,6 @@
 {
-  "appId": "io.ionic.starter",
-  "appName": "arista-public",
+  "appId": "com.kijho.arista",
+  "appName": "Arista",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",

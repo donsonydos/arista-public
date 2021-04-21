@@ -1,0 +1,30 @@
+.login-content {
+    background: #144e78!important;
+
+    .logo-row {
+      padding-top: 50px;
+      padding-bottom: 20px;
+    }
+
+    .login-box {
+      background: #184F77;
+      padding: 20px 20px 0 20px;
+      margin-top: 30px;
+    }
+
+    ion-row {
+      align-items: center;
+      text-align: center;
+    }
+
+    .item-inner {
+      box-shadow: none !important;
+    }
+    button {
+      width: 200px;
+      margin: 20px auto;
+    }
+  }
+app-login {
+  background-color: #144e78!important;
+}

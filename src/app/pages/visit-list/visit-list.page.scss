@@ -1,0 +1,21 @@
+ion-item-sliding .item {
+    padding-left: 0;
+}
+ion-list.list {
+    height: calc(100vh - 320px);
+    overflow: auto;
+}
+.total {
+    padding: 0;
+    background-color: #fff7da;
+}
+.total .label {
+    margin: 5px 0;
+}
+.total .item-inner {
+    border: none!important;
+    color: #19648c;
+}
+.white-space {
+    white-space: initial;
+}
